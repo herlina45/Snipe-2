@@ -142,7 +142,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                     <!-- Navbar Right Menu -->
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
-                            @can('index', \App\Models\Asset::class)
+                            <!--@can('index', \App\Models\Asset::class)
                                 <li aria-hidden="true"{!! (Request::is('hardware*') ? ' class="active"' : '') !!}>
                                     <a href="{{ url('hardware') }}" {{$snipeSettings->shortcuts_enabled == 1 ? "accesskey=1" : ''}} tabindex="-1" data-tooltip="true" data-placement="bottom" data-title="{{ trans('general.assets') }}">
                                         <x-icon type="assets" class="fa-fw" />
@@ -181,18 +181,18 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                         <span class="sr-only">{{ trans('general.components') }}</span>
                                     </a>
                                 </li>
-                            @endcan
+                            @endcan-->
 
                             @can('index', \App\Models\Asset::class)
                                 <li>
                                     <form class="navbar-form navbar-left form-horizontal" role="search"
                                           action="{{ route('findbytag/hardware') }}" method="get">
-                                        <div class="col-xs-12 col-md-12">
+                                        <!-- <div class="col-xs-12 col-md-12">
                                             <div class="col-xs-12 form-group">
                                                 <label class="sr-only" for="tagSearch">
                                                     {{ trans('general.lookup_by_tag') }}
                                                 </label>
-                                                <input type="text" class="form-control" id="tagSearch" name="assetTag" placeholder="{{ trans('general.lookup_by_tag') }}">
+                                                <input type="text" class="form-control" id="tagSearch" name="assetTag"  style="border-radius: 20px;" placeholder="{{ trans('general.lookup_by_tag') }}">
                                                 <input type="hidden" name="topsearch" value="true" id="search">
                                             </div>
                                             <div class="col-xs-1">
@@ -201,7 +201,23 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                                     <span class="sr-only">{{ trans('general.search') }}</span>
                                                 </button>
                                             </div>
+                                        </div> -->
+
+                                        <div class="col-xs-12 col-md-12 position-relative" style="position: relative;">
+                                            <div class="col-xs-12 form-group" style="position: relative;">
+                                                <label class="sr-only" for="tagSearch">
+                                                    {{ trans('general.lookup_by_tag') }}
+                                                </label>
+                                                <input type="text" class="form-control" id="tagSearch" name="assetTag" placeholder="{{ trans('general.search') }}" style="border-radius: 20px; padding-right: 100px;  opacity: 80%;">
+                                                <input type="hidden" name="topsearch" value="true" id="search">
+
+                                                <span type="submit" id="topSearchButton" class="text-primary" style="position: absolute; top: 50%; right: 1px; transform: translateY(-50%); padding: 0; border: none; background: none;">
+                                                    <x-icon type="search" />
+                                                    <!-- <span class="sr-only">{{ trans('general.search') }}</span> -->
+                                                </span>
+                                            </div>
                                         </div>
+
                                     </form>
                                 </li>
                             @endcan
@@ -221,7 +237,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                                 </a>
                                             </li>
                                         @endcan
-                                        @can('create', \App\Models\License::class)
+                                        <!-- @can('create', \App\Models\License::class)
                                             <li{!! (Request::is('licenses/create') ? ' class="active"' : '') !!}>
                                                 <a href="{{ route('licenses.create') }}" tabindex="-1">
                                                     <x-icon type="licenses" />
@@ -252,7 +268,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                                     {{ trans('general.component') }}
                                                 </a>
                                             </li>
-                                        @endcan
+                                        @endcan -->
                                         @can('create', \App\Models\User::class)
                                             <li {!! (Request::is('users/create') ? 'class="active"' : '') !!}>
                                                 <a href="{{ route('users.create') }}" tabindex="-1">
@@ -439,7 +455,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                         @can('admin')
                             <li {!! (\Request::route()->getName()=='home' ? ' class="active"' : '') !!} class="firstnav">
                                 <a href="{{ route('home') }}">
-                                    <x-icon type="dashboard" class="fa-fw" />
+                                    <x-icon type="home" class="fa-fw" />
                                     <span>{{ trans('general.dashboard') }}</span>
                                 </a>
                             </li>
@@ -593,7 +609,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                 </ul>
                             </li>
                         @endcan
-                        @can('view', \App\Models\License::class)
+                        <!-- @can('view', \App\Models\License::class)
                             <li{!! (Request::is('licenses*') ? ' class="active"' : '') !!}>
                                 <a href="{{ route('licenses.index') }}">
                                     <x-icon type="licenses" class="fa-fw"/>
@@ -624,7 +640,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                     <span>{{ trans('general.components') }}</span>
                                 </a>
                             </li>
-                        @endcan
+                        @endcan -->
                         @can('view', \App\Models\PredefinedKit::class)
                             <li{!! (Request::is('kits') ? ' class="active"' : '') !!}>
                                 <a href="{{ route('kits.index') }}">

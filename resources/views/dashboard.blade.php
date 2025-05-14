@@ -28,7 +28,7 @@
 
 <div class="row">
   <!-- panel -->
-  <div class="col-lg-2 col-xs-6">
+  <div class="col-lg-6">
       <a href="{{ route('hardware.index') }}">
     <!-- small box -->
     <div class="dashboard small-box bg-teal">
@@ -48,9 +48,8 @@
       </a>
   </div><!-- ./col -->
 
-  <div class="col-lg-2 col-xs-6">
+  <!-- <div class="col-lg-2 col-xs-6">
      <a href="{{ route('licenses.index') }}">
-    <!-- small box -->
     <div class="dashboard small-box bg-maroon">
       <div class="inner">
         <h3>{{ number_format($counts['license']) }}</h3>
@@ -66,11 +65,10 @@
         @endcan
     </div>
      </a>
-  </div><!-- ./col -->
+  </div>
 
 
   <div class="col-lg-2 col-xs-6">
-    <!-- small box -->
       <a href="{{ route('accessories.index') }}">
     <div class="dashboard small-box bg-orange">
       <div class="inner">
@@ -87,11 +85,9 @@
       @endcan
     </div>
       </a>
-  </div><!-- ./col -->
+  </div>
 
   <div class="col-lg-2 col-xs-6">
-    <!-- small box -->
-
       <a href="{{ route('consumables.index') }}">
     <div class="dashboard small-box bg-purple">
       <div class="inner">
@@ -107,11 +103,10 @@
         </a>
       @endcan
     </div>
-  </div><!-- ./col -->
+  </div>
 
   <div class="col-lg-2 col-xs-6">
     <a href="{{ route('components.index') }}">
-   <!-- small box -->
    <div class="dashboard small-box bg-yellow">
      <div class="inner">
        <h3>{{ number_format($counts['component']) }}</h3>
@@ -127,9 +122,9 @@
        @endcan
    </div>
     </a>
- </div><!-- ./col -->
+ </div> -->
 
- <div class="col-lg-2 col-xs-6">
+ <div class="col-lg-6">
     <a href="{{ route('users.index') }}">
    <!-- small box -->
    <div class="dashboard small-box bg-light-blue">
@@ -176,27 +171,29 @@
 
                         </div>
                     </div>
+
+                    <!-- NEW BLABLABLA -->
                     <div class="row">
                         <div class="col-md-3">
                             @can('create', \App\Models\Asset::class)
                             <a class="btn bg-teal" style="width: 100%" href="{{ route('hardware.create') }}">{{ trans('general.new_asset') }}</a>
                             @endcan
                         </div>
-                        <div class="col-md-3">
-                            @can('create', \App\Models\License::class)
-                                <a class="btn bg-maroon" style="width: 100%" href="{{ route('licenses.create') }}">{{ trans('general.new_license') }}</a>
-                            @endcan
-                        </div>
-                        <div class="col-md-3">
-                            @can('create', \App\Models\Accessory::class)
-                                <a class="btn bg-orange" style="width: 100%" href="{{ route('accessories.create') }}">{{ trans('general.new_accessory') }}</a>
-                            @endcan
-                        </div>
-                        <div class="col-md-3">
-                            @can('create', \App\Models\Consumable::class)
-                                <a class="btn bg-purple" style="width: 100%" href="{{ route('consumables.create') }}">{{ trans('general.new_consumable') }}</a>
-                            @endcan
-                        </div>
+                            <!-- <div class="col-md-3">
+                                @can('create', \App\Models\License::class)
+                                    <a class="btn bg-maroon" style="width: 100%" href="{{ route('licenses.create') }}">{{ trans('general.new_license') }}</a>
+                                @endcan
+                            </div>
+                            <div class="col-md-3">
+                                @can('create', \App\Models\Accessory::class)
+                                    <a class="btn bg-orange" style="width: 100%" href="{{ route('accessories.create') }}">{{ trans('general.new_accessory') }}</a>
+                                @endcan
+                            </div>
+                            <div class="col-md-3">
+                                @can('create', \App\Models\Consumable::class)
+                                    <a class="btn bg-purple" style="width: 100%" href="{{ route('consumables.create') }}">{{ trans('general.new_consumable') }}</a>
+                                @endcan
+                            </div> -->
                     </div>
                 </div>
             </div>
@@ -416,6 +413,7 @@
 
 		@endif
 			
+        
     </div>
     <div class="col-md-6">
 
