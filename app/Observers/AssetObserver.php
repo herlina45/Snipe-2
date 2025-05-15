@@ -7,6 +7,7 @@ use App\Models\Asset;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Helpers\AssetTagHelper;
 
 class AssetObserver
 {
@@ -114,6 +115,19 @@ class AssetObserver
         }
         $logAction->logaction('create');
     }
+
+        //AssetTag auto generate
+    public function creating(Asset $asset)
+        {
+            \Log::info('Creating observer jalan');
+            // Generate asset tag sebelum disimpan ke DB
+            $asset->asset_tag = AssetTagHelper::generateAssetTag($asset);
+        }
+
+
+
+
+
 
     /**
      * Listen to the Asset deleting event.
