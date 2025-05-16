@@ -1,4 +1,3 @@
-
 @extends('layouts/edit-form', [
     'createText' => trans('admin/hardware/form.create'),
     'updateText' => trans('admin/hardware/form.update'),
@@ -13,41 +12,20 @@
                ]
 ])
 
-
-{{-- Page content --}}
 @section('inputFields')
     
     @include ('partials.forms.edit.company-select', ['translated_name' => trans('general.company'), 'fieldname' => 'company_id'])
 
-
-  <!-- Asset Tag -->
-  <div class="form-group {{ $errors->has('asset_tag') ? ' has-error' : '' }}">
-    <label for="asset_tag" class="col-md-3 control-label">{{ trans('admin/hardware/form.tag') }}</label>
-
-
-
-      @if  ($item->id)
-          <!-- we are editing an existing asset,  there will be only one asset tag -->
-          <div class="col-md-7 col-sm-12">
-
-          <input class="form-control" type="text" name="asset_tags[1]" id="asset_tag" value="{{ old('asset_tag', $item->asset_tag) }}" readonly>
-              {!! $errors->first('asset_tags', '<span class="alert-msg"><i class="fas fa-times"></i> :message</span>') !!}
-              {!! $errors->first('asset_tag', '<span class="alert-msg"><i class="fas fa-times"></i> :message</span>') !!}
-          </div>
-      @else
-          <!-- we are creating a new asset - let people use more than one asset tag -->
-          <div class="col-md-7 col-sm-12">
-              <input class="form-control" type="text" name="asset_tags[1]" id="asset_tag" value="{{ old('asset_tags.1', \App\Models\Asset::autoincrement_asset()) }}" readonly>
-              {!! $errors->first('asset_tags', '<span class="alert-msg"><i class="fas fa-times"></i> :message</span>') !!}
-              {!! $errors->first('asset_tag', '<span class="alert-msg"><i class="fas fa-times"></i> :message</span>') !!}
-          </div>
-          <div class="col-md-2 col-sm-12">
-              <button class="add_field_button btn btn-default btn-sm">
-                  <x-icon type="plus" />
-              </button>
-          </div>
-      @endif
-  </div>
+    <!-- Asset Tag -->
+    <div class="form-group {{ $errors->has('asset_tag') ? 'has-error' : '' }}">
+        <label for="asset_tag" class="col-md-3 control-label">{{ trans('admin/hardware/form.tag') }}</label>
+        <div class="col-md-7 col-sm-12">
+            <input class="form-control" type="text" id="asset_tag" value="{{ old('asset_tag', $item->asset_tag) }}" disabled>
+            <p class="help-block">Asset tag akan digenerate otomatis</p>
+            {!! $errors->first('asset_tags', '<span class="alert-msg"><i class="fas fa-times"></i> :message</span>') !!}
+            {!! $errors->first('asset_tag', '<span class="alert-msg"><i class="fas fa-times"></i> :message</span>') !!}
+        </div>
+    </div>
 
     @include ('partials.forms.edit.serial', ['fieldname'=> 'serials[1]', 'old_val_name' => 'serials.1', 'translated_serial' => trans('admin/hardware/form.serial')])
 
@@ -55,7 +33,6 @@
     </div>
 
     @include ('partials.forms.edit.model-select', ['translated_name' => trans('admin/hardware/form.model'), 'fieldname' => 'model_id', 'field_req' => true])
-
 
     @include ('partials.forms.edit.status', [ 'required' => 'true'])
     @if (!$item->id)
@@ -70,12 +47,6 @@
 
     @include ('partials.forms.edit.notes')
     @include ('partials.forms.edit.location-select', ['translated_name' => trans('admin/hardware/form.default_location'), 'fieldname' => 'rtd_location_id', 'help_text' => trans('general.rtd_location_help')])
-    @include ('partials.forms.edit.requestable', ['requestable_text' => trans('admin/hardware/general.requestable')])
-
-
-
-    @include ('partials.forms.edit.image-upload', ['image_path' => app('assets_upload_path')])
-
 
     <div id='custom_fields_content'>
         <!-- Custom Fields -->
@@ -96,92 +67,15 @@
         @endif
     </div>
 
-    <div class="form-group">
-    <label class="col-md-3 control-label"></label>
+    <!-- Optional Information (Hanya Asset Name) -->
+    @include ('partials.forms.edit.name', ['translated_name' => trans('admin/hardware/form.name')])
 
-        <div class="col-md-9 col-sm-9 col-md-offset-3">
+    <!-- Order Related Information (Hanya Purchase Date) -->
+    @include ('partials.forms.edit.purchase_date')
 
-        <a id="optional_info" class="text-primary">
-            <x-icon type="caret-right" class="fa-2x" id="optional_info_icon" />
-            <strong>{{ trans('admin/hardware/form.optional_infos') }}</strong>
-        </a>
-
-        </div>
-        
-        <div id="optional_details" class="col-md-12" style="display:none">
-        <br>
-            @include ('partials.forms.edit.name', ['translated_name' => trans('admin/hardware/form.name')])
-            @include ('partials.forms.edit.warranty')
-
-            <!-- Datepicker -->
-            <div class="form-group{{ $errors->has('next_audit_date') ? ' has-error' : '' }}">
-
-                <label class="col-md-3 control-label">
-                    {{ trans('general.next_audit_date') }}
-                </label>
-
-                <div class="input-group col-md-4">
-                    <div class="input-group date" data-provide="datepicker" data-date-clear-btn="true" data-date-format="yyyy-mm-dd"  data-autoclose="true">
-                        <input type="text" class="form-control" placeholder="{{ trans('general.select_date') }}" name="next_audit_date" id="next_audit_date" value="{{ old('next_audit_date', $item->next_audit_date) }}" readonly style="background-color:inherit" maxlength="10">
-                        <span class="input-group-addon"><x-icon type="calendar" /></span>
-                    </div>
-                </div>
-                <div class="col-md-8 col-md-offset-3">
-                    {!! $errors->first('next_audit_date', '<span class="alert-msg" aria-hidden="true"><i class="fas fa-times" aria-hidden="true"></i> :message</span>') !!}
-                    <p class="help-block">{!! trans('general.next_audit_date_help') !!}</p>
-                </div>
-
-            </div>
-
-
-            <!-- byod checkbox -->
-            <div class="form-group">
-                <div class="col-md-7 col-md-offset-3">
-                    <label class="form-control">
-                        <input type="checkbox" value="1" name="byod" {{ (old('remote', $item->byod)) == '1' ? ' checked="checked"' : '' }} aria-label="byod">
-                        {{ trans('general.byod') }}
-
-                    </label>
-                    <p class="help-block">{{ trans('general.byod_help') }}
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <div class="col-md-9 col-sm-9 col-md-offset-3">
-            <a id="order_info" class="text-primary">
-                <x-icon type="caret-right" class="fa-2x" id="order_info_icon" />
-                <strong>{{ trans('admin/hardware/form.order_details') }}</strong>
-            </a>
-
-        </div>
-
-        <div id='order_details' class="col-md-12" style="display:none">
-            <br>
-            @include ('partials.forms.edit.order_number')
-            @include ('partials.forms.edit.purchase_date')
-            @include ('partials.forms.edit.eol_date')
-            @include ('partials.forms.edit.supplier-select', ['translated_name' => trans('general.supplier'), 'fieldname' => 'supplier_id'])
-
-                @php
-                $currency_type = null;
-                if ($item->id && $item->location) {
-                    $currency_type = $item->location->currency;
-                }
-                @endphp
-
-            @include ('partials.forms.edit.purchase_cost', ['currency_type' => $currency_type])
-
-        </div>
-    </div>
-   
 @stop
 
 @section('moar_scripts')
-
-
 
 <script nonce="{{ csrf_token() }}">
 
@@ -205,7 +99,6 @@
         if (modelid == '') {
             $('#custom_fields_content').html("");
         } else {
-
             $.ajax({
                 type: 'GET',
                 url: "{{ config('app.url') }}/models/" + modelid + "/custom_fields",
@@ -221,14 +114,10 @@
                     //now re-populate the custom fields based on the previously saved values
                     $('#custom_fields_content').find('input,select').each(function (index,elem) {
                         if(transformed_oldvals[elem.name]) {
-                             {{-- If there already *is* is a previously-input 'transformed_oldvals' handy,
-                                  overwrite with that previously-input value *IF* this is an edit of an existing item *OR*
-                                  if there is no new default custom field value coming from the model --}}
                             if({{ $item->id ? 'true' : 'false' }} || $(elem).val() == '') {
                                 $(elem).val(transformed_oldvals[elem.name]).trigger('change'); //the trigger is for select2-based objects, if we have any
                             }
                         }
-
                     });
                 }
             });
@@ -236,7 +125,6 @@
     }
 
     function user_add(status_id) {
-
         if (status_id != '') {
             $(".status_spinner").css("display", "inline");
             $.ajax({
@@ -256,8 +144,6 @@
                         $("#selected_status_status").removeClass('text-danger');
                         $("#selected_status_status").addClass('text-success');
                         $("#selected_status_status").html('<x-icon type="checkmark" /> {{ trans('admin/hardware/form.asset_deployable')}}');
-
-
                     } else {
                         $("#assignto_selector").hide();
                         $("#selected_status_status").removeClass('text-success');
@@ -268,7 +154,6 @@
             });
         }
     }
-
 
     $(function () {
         //grab custom fields for this model whenever model changes.
@@ -281,32 +166,24 @@
         $(".status_id").on("change", function () {
             user_add($(".status_id").val());
         });
-
     });
-
 
     // Add another asset tag + serial combination if the plus sign is clicked
     $(document).ready(function() {
-
         var max_fields      = 100; //maximum input boxes allowed
         var wrapper         = $(".input_fields_wrap"); //Fields wrapper
         var add_button      = $(".add_field_button"); //Add button ID
         var x               = 1; //initial text box count
 
-
-
-
         $(add_button).click(function(e){ //on add input button click
-
             e.preventDefault();
 
             var auto_tag = $("#asset_tag").val().replace(/^{{ preg_quote(App\Models\Setting::getSettings()->auto_increment_prefix) }}/g, '');
             var box_html        = '';
-			const zeroPad 		= (num, places) => String(num).padStart(places, '0');
+            const zeroPad       = (num, places) => String(num).padStart(places, '0');
 
             // Check that we haven't exceeded the max number of asset fields
             if (x < max_fields) {
-
                 if (auto_tag!='') {
                      auto_tag = zeroPad(parseInt(auto_tag) + parseInt(x),auto_tag.length);
                 } else {
@@ -344,62 +221,10 @@
             $(".add_field_button").removeAttr('disabled');
             $(".add_field_button").removeClass('disabled');
             e.preventDefault();
-            //console.log(x);
-
             $(this).parent('div').parent('div').parent('span').remove();
             x--;
         });
-
-
-        $('.expand').click(function(){
-            id = $(this).attr('id');
-            fields = $(this).text();
-            if (txt == '+'){
-                $(this).text('-');
-            }
-            else{
-                $(this).text('+');
-            }
-            $("#"+id).toggle();
-
-        });
-
-        {{-- TODO: Clean up some of the duplication in here. Not too high of a priority since we only copied it once. --}}
-        $("#optional_info").on("click",function(){
-            $('#optional_details').fadeToggle(100);
-            $('#optional_info_icon').toggleClass('fa-caret-right fa-caret-down');
-            var optional_info_open = $('#optional_info_icon').hasClass('fa-caret-down');
-            document.cookie = "optional_info_open="+optional_info_open+'; path=/';
-        });
-
-        $("#order_info").on("click",function(){
-            $('#order_details').fadeToggle(100);
-            $("#order_info_icon").toggleClass('fa-caret-right fa-caret-down');
-            var order_info_open = $('#order_info_icon').hasClass('fa-caret-down');
-            document.cookie = "order_info_open="+order_info_open+'; path=/';
-        });
-
-        var all_cookies = document.cookie.split(';')
-        for(var i in all_cookies) {
-            var trimmed_cookie = all_cookies[i].trim(' ')
-            if (trimmed_cookie.startsWith('optional_info_open=')) {
-                elems = all_cookies[i].split('=', 2)
-                if (elems[1] == 'true') {
-                    $('#optional_info').trigger('click')
-                }
-            }
-            if (trimmed_cookie.startsWith('order_info_open=')) {
-                elems = all_cookies[i].split('=', 2)
-                if (elems[1] == 'true') {
-                    $('#order_info').trigger('click')
-                }
-            }
-        }
-
     });
-
-
-
 
 </script>
 @stop
