@@ -116,12 +116,13 @@ class AssetObserver
         $logAction->logaction('create');
     }
 
-        //AssetTag auto generate
+    //AssetTag auto generate
     public function creating(Asset $asset)
         {
-            \Log::info('Creating observer jalan');
             // Generate asset tag sebelum disimpan ke DB
+            if (empty($asset->asset_tag)) {
             $asset->asset_tag = AssetTagHelper::generateAssetTag($asset);
+            }
         }
 
 

@@ -22,7 +22,6 @@ class AssetTagHelper
         $purchaseDate = $asset->purchase_date ?? now();
         $monthYear = Carbon::parse($purchaseDate)->format('my');
 
-        \Log::info('AssetTagHelper dipanggil');
         // Find or create counter
         $counter = AssetCounter::firstOrCreate(
             [
@@ -39,7 +38,7 @@ class AssetTagHelper
         $counter->refresh(); // ambil data terbaru dari DB
         $runningCode = str_pad($counter->counter, 3, '0', STR_PAD_LEFT);
 
-        
+
         return "{$companyCode}{$departmentCode}-{$categoryCode}{$subCategoryCode}-{$runningCode}-{$monthYear}";
     }
 }

@@ -17,15 +17,25 @@
     @include ('partials.forms.edit.company-select', ['translated_name' => trans('general.company'), 'fieldname' => 'company_id'])
 
     <!-- Asset Tag -->
-    <div class="form-group {{ $errors->has('asset_tag') ? 'has-error' : '' }}">
-        <label for="asset_tag" class="col-md-3 control-label">{{ trans('admin/hardware/form.tag') }}</label>
-        <div class="col-md-7 col-sm-12">
-            <input class="form-control" type="text" id="asset_tag" value="{{ old('asset_tag', $item->asset_tag) }}" disabled>
-            <p class="help-block">Asset tag akan digenerate otomatis</p>
-            {!! $errors->first('asset_tags', '<span class="alert-msg"><i class="fas fa-times"></i> :message</span>') !!}
-            {!! $errors->first('asset_tag', '<span class="alert-msg"><i class="fas fa-times"></i> :message</span>') !!}
-        </div>
-    </div>
+    <div class="form-group {{ $errors->has('asset_tag') ? ' has-error' : '' }}">
+    <label for="asset_tag" class="col-md-3 control-label">{{ trans('admin/hardware/form.tag') }}</label>
+      @if  ($item->id)
+          <!-- we are editing an existing asset,  there will be only one asset tag -->
+          <div class="col-md-7 col-sm-12">
+
+          <input class="form-control" type="text" name="asset_tags[1]" id="asset_tag" value="{{ old('asset_tag', $item->asset_tag) }}" readonly>
+              {!! $errors->first('asset_tags', '<span class="alert-msg"><i class="fas fa-times"></i> :message</span>') !!}
+              {!! $errors->first('asset_tag', '<span class="alert-msg"><i class="fas fa-times"></i> :message</span>') !!}
+          </div>
+      @else
+          <!-- we are creating a new asset - let people use more than one asset tag -->
+          <div class="col-md-7 col-sm-12">
+              <input class="form-control" type="text" name="asset_tags[1]" id="asset_tag" value="{{ old('asset_tags.1', \App\Models\Asset::autoincrement_asset()) }}" readonly>
+              {!! $errors->first('asset_tags', '<span class="alert-msg"><i class="fas fa-times"></i> :message</span>') !!}
+              {!! $errors->first('asset_tag', '<span class="alert-msg"><i class="fas fa-times"></i> :message</span>') !!}
+          </div>
+      @endif
+  </div>
 
     @include ('partials.forms.edit.serial', ['fieldname'=> 'serials[1]', 'old_val_name' => 'serials.1', 'translated_serial' => trans('admin/hardware/form.serial')])
 
