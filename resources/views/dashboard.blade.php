@@ -28,7 +28,7 @@
 
 <div class="row">
   <!-- panel -->
-  <div class="col-lg-6">
+  <div class="col-lg-2">
       <a href="{{ route('hardware.index') }}">
     <!-- small box -->
     <div class="dashboard small-box bg-teal">
@@ -46,9 +46,9 @@
       @endcan
     </div>
       </a>
-  </div><!-- ./col -->
+  </div>
 
-  <!-- <div class="col-lg-2 col-xs-6">
+  <div class="col-lg-2">
      <a href="{{ route('licenses.index') }}">
     <div class="dashboard small-box bg-maroon">
       <div class="inner">
@@ -67,8 +67,28 @@
      </a>
   </div>
 
+   <div class="col-lg-2">
+    <a href="{{ route('users.index') }}">
+   <!-- small box -->
+   <div class="dashboard small-box bg-light-blue">
+     <div class="inner">
+       <h3>{{ number_format($counts['user']) }}</h3>
+       <p>{{ trans('general.people') }}</p>
+     </div>
+     <div class="icon" aria-hidden="true">
+         <x-icon type="users" />
+     </div>
+       @can('view', \App\Models\License::class)
+         <a href="{{ route('users.index') }}" class="small-box-footer">{{ trans('general.view_all') }}
+             <x-icon type="arrow-circle-right" />
+         </a>
+       @endcan
+   </div>
+    </a>
+    </div>
 
-  <div class="col-lg-2 col-xs-6">
+
+  <!-- <div class="col-lg-2 col-xs-6">
       <a href="{{ route('accessories.index') }}">
     <div class="dashboard small-box bg-orange">
       <div class="inner">
@@ -124,25 +144,6 @@
     </a>
  </div> -->
 
- <div class="col-lg-6">
-    <a href="{{ route('users.index') }}">
-   <!-- small box -->
-   <div class="dashboard small-box bg-light-blue">
-     <div class="inner">
-       <h3>{{ number_format($counts['user']) }}</h3>
-       <p>{{ trans('general.people') }}</p>
-     </div>
-     <div class="icon" aria-hidden="true">
-         <x-icon type="users" />
-     </div>
-       @can('view', \App\Models\License::class)
-         <a href="{{ route('users.index') }}" class="small-box-footer">{{ trans('general.view_all') }}
-             <x-icon type="arrow-circle-right" />
-         </a>
-       @endcan
-   </div>
-    </a>
- </div><!-- ./col -->
 
 </div>
 </div>
@@ -172,19 +173,20 @@
                         </div>
                     </div>
 
-                    <!-- NEW BLABLABLA -->
+                    <!-- new button yh sob -->
+
                     <div class="row">
                         <div class="col-md-3">
                             @can('create', \App\Models\Asset::class)
                             <a class="btn bg-teal" style="width: 100%" href="{{ route('hardware.create') }}">{{ trans('general.new_asset') }}</a>
                             @endcan
                         </div>
+                        <div class="col-md-3">
+                            @can('create', \App\Models\License::class)
+                                <a class="btn bg-maroon" style="width: 100%" href="{{ route('licenses.create') }}">{{ trans('general.new_license') }}</a>
+                            @endcan
+                        </div>
                             <!-- <div class="col-md-3">
-                                @can('create', \App\Models\License::class)
-                                    <a class="btn bg-maroon" style="width: 100%" href="{{ route('licenses.create') }}">{{ trans('general.new_license') }}</a>
-                                @endcan
-                            </div>
-                            <div class="col-md-3">
                                 @can('create', \App\Models\Accessory::class)
                                     <a class="btn bg-orange" style="width: 100%" href="{{ route('accessories.create') }}">{{ trans('general.new_accessory') }}</a>
                                 @endcan

@@ -117,6 +117,11 @@ class Category extends SnipeModel
         return $this->hasMany(\App\Models\Accessory::class);
     }
 
+    public function ticketings()
+    {
+        return $this->hasMany(Ticketing::class);
+    }
+
     /**
      * Establishes the category -> licenses relationship
      *

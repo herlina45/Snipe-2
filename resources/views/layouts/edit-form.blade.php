@@ -1,11 +1,22 @@
+@props([
+    'createText' => 'Create',
+    'updateText' => 'Update',
+    'topSubmit' => false,
+    'helpText' => '',
+    'helpPosition' => 'right',
+    'formAction' => '',
+    'index_route' => '',
+    'options' => [],
+])
+
 @extends('layouts.default')
 
 {{-- Page title --}}
 @section('title')
-    @if ($item->id)
+    @if (isset($item) && $item->id)        
         {{ $updateText }}
-    @else
-        {{ $createText }}
+        @else
+            {{ $createText }}
     @endif
 @parent
 @stop
@@ -59,7 +70,7 @@
             <div class="box-body">
 
                 <div style="padding-top: 30px;">
-                    @if ($item->id)
+    @if (isset($item) && $item->id)        
                     {{ method_field('PUT') }}
                     @endif
 

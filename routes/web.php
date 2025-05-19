@@ -29,6 +29,8 @@ use App\Models\ReportTemplate;
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
 
+use App\Http\Controllers\TicketingController;
+
 Route::group(['middleware' => 'auth'], function () {
     /*
     * Companies
@@ -123,6 +125,19 @@ Route::group(['middleware' => 'auth'], function () {
     * Departments
     */
     Route::resource('departments', DepartmentsController::class);
+
+    /*
+    * Ticketings
+    */
+        // Route::resource('ticketing', TicketingController::class);
+Route::resource('ticketing', TicketingController::class);
+
+// Tambahan route khusus ticketing
+Route::prefix('ticketing')->group(function () {
+    Route::patch('status/{ticketing}', [TicketingController::class, 'updateStatus'])->name('ticketing.updateStatus');
+    Route::patch('bulk-update-status', [TicketingController::class, 'bulkUpdateStatus'])->name('ticketing.bulkUpdateStatus');
+    Route::get('custom-report', [TicketingController::class, 'customReport'])->name('ticketing.custom_report');
+    Route::post('bulk-update', [TicketingController::class, 'bulkUpdate'])->name('ticketing.bulkUpdate');
 });
 
 /*
@@ -735,4 +750,4 @@ Route::middleware(['auth'])->get(
 )->name('home')
     ->breadcrumbs(fn (Trail $trail) =>
     $trail->push('Home', route('home'))
-    );
+    );});

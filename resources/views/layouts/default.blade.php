@@ -14,6 +14,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 
     <link rel="apple-touch-icon"
           href="{{ ($snipeSettings) && ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->logo)) :  config('app.url').'/img/snipe-logo-bug.png' }}">
@@ -222,6 +223,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                 </li>
                             @endcan
 
+                            <!-- inimah buat create new yg diatas itu -->
                             @can('admin')
                                 <li class="dropdown" aria-hidden="true">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">
@@ -237,7 +239,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                                 </a>
                                             </li>
                                         @endcan
-                                        <!-- @can('create', \App\Models\License::class)
+                                        @can('create', \App\Models\License::class)
                                             <li{!! (Request::is('licenses/create') ? ' class="active"' : '') !!}>
                                                 <a href="{{ route('licenses.create') }}" tabindex="-1">
                                                     <x-icon type="licenses" />
@@ -245,7 +247,17 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                                 </a>
                                             </li>
                                         @endcan
-                                        @can('create', \App\Models\Accessory::class)
+                                        @can('create', \App\Models\Ticketing::class)
+                                            <li{!! (Request::is('ticketing/create') ? ' class="active"' : '') !!}>
+                                                <a href="{{ route('ticketing.create') }}" tabindex="-1">
+                                                    <i class="fas fa-ticket fa-fw"></i>                                                    
+                                                    {{ trans('general.ticketing') }}
+                                                </a>
+                                            </li>
+                                        @endcan
+
+
+                                        <!-- @can('create', \App\Models\Accessory::class)
                                             <li {!! (Request::is('accessories/create') ? 'class="active"' : '') !!}>
                                                 <a href="{{ route('accessories.create') }}" tabindex="-1">
                                                     <x-icon type="accessories" />
@@ -268,7 +280,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                                     {{ trans('general.component') }}
                                                 </a>
                                             </li>
-                                        @endcan -->
+                                        @endcan
                                         @can('create', \App\Models\User::class)
                                             <li {!! (Request::is('users/create') ? 'class="active"' : '') !!}>
                                                 <a href="{{ route('users.create') }}" tabindex="-1">
@@ -276,7 +288,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                                     {{ trans('general.user') }}
                                                 </a>
                                             </li>
-                                        @endcan
+                                        @endcan -->
                                     </ul>
                                 </li>
                             @endcan
@@ -609,7 +621,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                 </ul>
                             </li>
                         @endcan
-                        <!-- @can('view', \App\Models\License::class)
+                        @can('view', \App\Models\License::class)
                             <li{!! (Request::is('licenses*') ? ' class="active"' : '') !!}>
                                 <a href="{{ route('licenses.index') }}">
                                     <x-icon type="licenses" class="fa-fw"/>
@@ -617,7 +629,16 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                 </a>
                             </li>
                         @endcan
-                        @can('index', \App\Models\Accessory::class)
+                        @can('view', \App\Models\Ticketing::class)
+                            <li{!! (Request::is('ticketing*') ? ' class="active"' : '') !!}>
+                                <a href="{{ route('ticketing.index') }}">
+                                    <i class="fas fa-ticket fa-fw"></i>
+                                    <span>{{ trans('Ticketing') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+
+                        <!-- @can('index', \App\Models\Accessory::class)
                             <li{!! (Request::is('accessories*') ? ' class="active"' : '') !!}>
                                 <a href="{{ route('accessories.index') }}">
                                     <x-icon type="accessories" class="fa-fw" />
@@ -640,7 +661,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                     <span>{{ trans('general.components') }}</span>
                                 </a>
                             </li>
-                        @endcan -->
+                        @endcan
                         @can('view', \App\Models\PredefinedKit::class)
                             <li{!! (Request::is('kits') ? ' class="active"' : '') !!}>
                                 <a href="{{ route('kits.index') }}">
@@ -648,7 +669,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                     <span>{{ trans('general.kits') }}</span>
                                 </a>
                             </li>
-                        @endcan
+                        @endcan -->
 
                         @can('view', \App\Models\User::class)
                             <li{!! (Request::is('users*') ? ' class="active"' : '') !!}>

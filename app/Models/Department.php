@@ -80,6 +80,11 @@ class Department extends SnipeModel
         return $this->belongsTo(\App\Models\Company::class, 'company_id');
     }
 
+    public function ticketings()
+    {
+        return $this->hasMany(Ticketing::class);
+    }
+
     /**
      * Establishes the department -> users relationship
      *
