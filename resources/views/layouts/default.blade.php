@@ -14,6 +14,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
 
     <link rel="apple-touch-icon"
           href="{{ ($snipeSettings) && ($snipeSettings->favicon!='') ?  Storage::disk('public')->url(e($snipeSettings->logo)) :  config('app.url').'/img/snipe-logo-bug.png' }}">
@@ -222,6 +223,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                 </li>
                             @endcan
 
+                            <!-- inimah buat create new yg diatas itu -->
                             @can('admin')
                                 <li class="dropdown" aria-hidden="true">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">
@@ -245,6 +247,16 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                                 </a>
                                             </li>
                                         @endcan
+                                        @can('create', \App\Models\Ticketing::class)
+                                            <li{!! (Request::is('ticketing/create') ? ' class="active"' : '') !!}>
+                                                <a href="{{ route('ticketing.create') }}" tabindex="-1">
+                                                    <i class="fas fa-ticket fa-fw"></i>                                                    
+                                                    {{ trans('general.ticketing') }}
+                                                </a>
+                                            </li>
+                                        @endcan
+
+
                                         <!-- @can('create', \App\Models\Accessory::class)
                                             <li {!! (Request::is('accessories/create') ? 'class="active"' : '') !!}>
                                                 <a href="{{ route('accessories.create') }}" tabindex="-1">
@@ -617,6 +629,15 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                 </a>
                             </li>
                         @endcan
+                        @can('view', \App\Models\Ticketing::class)
+                            <li{!! (Request::is('ticketing*') ? ' class="active"' : '') !!}>
+                                <a href="{{ route('ticketing.index') }}">
+                                    <i class="fas fa-ticket fa-fw"></i>
+                                    <span>{{ trans('Ticketing') }}</span>
+                                </a>
+                            </li>
+                        @endcan
+
                         <!-- @can('index', \App\Models\Accessory::class)
                             <li{!! (Request::is('accessories*') ? ' class="active"' : '') !!}>
                                 <a href="{{ route('accessories.index') }}">

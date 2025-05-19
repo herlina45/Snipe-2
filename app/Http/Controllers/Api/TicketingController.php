@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Ticketing;
+use Illuminate\Http\Request;
+
+class TicketingController extends Controller
+{
+    public function index(Request $request)
+    {
+        $query = Ticketing::with(['requester', 'department', 'requestFor', 'category'])
+            ->when($request->status, fn($query) => $query->where('status', $request->status))
+            ->when($request->department_id, fn($query) => $query->where('department_id', $request->department_id));
+
+        $ticketing = $query->paginate(50);
+
+        return response()->json([
+            'total' => $ticketing->total(),
+            'rows' => $ticketing->map(fn($item) => [
+                'id' => $item->id,
+                'ticket_number' => $item->ticket_number,
+                'requested_date' => $item->requested_date,
+                'required_date' => $item->required_date,
+                'requester' => $item->requester->name ?? 'N/A',
+                'department' => $item->department->name ?? 'N/A',
+                'request_for' => $item->requestFor->name ?? 'N/A',
+                'category' => $item->category->name ?? 'N/A',
+                'notes' => $item->notes ?? 'N/A',
+                'status' => $item->status,
+            ])
+        ]);
+
+
+        
+    }
+}

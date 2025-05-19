@@ -267,6 +267,16 @@ class User extends SnipeModel implements AuthenticatableContract, AuthorizableCo
         return $this->belongsTo(\App\Models\Department::class, 'department_id');
     }
 
+    public function ticketingsRequested()
+    {
+        return $this->hasMany(Ticketing::class, 'requested_by');
+    }
+
+    public function ticketingsAssigned()
+    {
+        return $this->hasMany(Ticketing::class, 'request_for');
+    }
+
     /**
      * Checks activated status
      *

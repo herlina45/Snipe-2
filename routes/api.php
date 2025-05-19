@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\TicketingController;
 
 
 /*
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'v1', 'middleware' => ['api', 'throttle:api']], function () {
 
+Route::get('ticketing', [TicketingController::class, 'index'])->name('api.ticketing.index');
 
     Route::get('/', function () {
         return response()->json(
