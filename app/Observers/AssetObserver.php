@@ -148,6 +148,38 @@ class AssetObserver
 
     /**
      * Listen to the Asset deleting event.
+     * For hard delete on asset_counters database.
+     * 
+     * @param  Asset  $asset
+     * @return void
+     */
+    public function deleted(Asset $asset)
+    {
+        $companyId = $asset->company_id;
+        $departmentCode = $asset->custom_fields['_snipeit_department_2'] ?? 'DP';
+        $categoryId = $asset->model->category_id ?? null;
+        $subCategoryCode = $asset->model->model_number ?? 'XXX';
+        $monthYear = Carbon::parse($asset->purchase_date)->format('my');
+
+        $stillUsed = Asset::where('company_id', $companyId)
+            ->where('model_id', $asset->model_id)
+            ->where('purchase_date', 'like', "%{$monthYear}")
+            ->where('_snipeit_department_2', $departmentCode)
+            ->exists();
+
+        if (! $stillUsed) {
+            \App\Models\AssetCounter::where([
+                'company_id' => $companyId,
+                'department_code' => $departmentCode,
+                'category_id' => $categoryId,
+                'sub_category_code' => $subCategoryCode,
+                'month_year' => $monthYear,
+            ])->delete();
+        }
+    }
+
+    /**
+     * Listen to the Asset deleting event.
      *
      * @param  Asset  $asset
      * @return void
