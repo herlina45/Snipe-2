@@ -130,10 +130,10 @@ Route::group(['middleware' => 'auth'], function () {
     * Ticketings
     */
         // Route::resource('ticketing', TicketingController::class);
-Route::resource('ticketing', TicketingController::class);
+    Route::resource('ticketing', TicketingController::class);
 
-// Tambahan route khusus ticketing
-Route::prefix('ticketing')->group(function () {
+    // Tambahan route khusus ticketing
+    Route::prefix('ticketing')->group(function () {
     Route::patch('status/{ticketing}', [TicketingController::class, 'updateStatus'])->name('ticketing.updateStatus');
     Route::patch('bulk-update-status', [TicketingController::class, 'bulkUpdateStatus'])->name('ticketing.bulkUpdateStatus');
     Route::get('custom-report', [TicketingController::class, 'customReport'])->name('ticketing.custom_report');

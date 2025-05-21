@@ -21,8 +21,8 @@ class TicketingController extends Controller
             'rows' => $ticketing->map(fn($item) => [
                 'id' => $item->id,
                 'ticket_number' => $item->ticket_number,
-                'requested_date' => $item->requested_date,
-                'required_date' => $item->required_date,
+                    'requested_date' => $item->requested_date ? \Carbon\Carbon::parse($item->requested_date)->format('d-m-Y') : '-',
+                    'required_date' => $item->required_date ? \Carbon\Carbon::parse($item->required_date)->format('d-m-Y') : '-',
                 'requester' => $item->requester->name ?? 'N/A',
                 'department' => $item->department->name ?? 'N/A',
                 'request_for' => $item->requestFor->name ?? 'N/A',
@@ -31,8 +31,5 @@ class TicketingController extends Controller
                 'status' => $item->status,
             ])
         ]);
-
-
-        
     }
 }

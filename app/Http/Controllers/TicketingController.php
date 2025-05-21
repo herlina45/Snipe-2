@@ -23,40 +23,46 @@ class TicketingController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'ticket_number' => 'required|unique:ticketing',
+        'ticket_number' => 'nullable|unique:ticketings',
             'requested_date' => 'required|date',
             'required_date' => 'required|date',
-            'requester_id' => 'required|exists:users,id',
+            'requested_by' => 'required|exists:users,id', // FIXED
             'department_id' => 'required|exists:departments,id',
-            'request_for_id' => 'required|exists:users,id',
+            'request_for' => 'nullable|exists:users,id',  // FIXED
             'category_id' => 'required|exists:categories,id',
             'notes' => 'nullable|string',
-            'status' => 'required|in:waiting_for_approval,approved,rejected',
-        ]);
-
+            'status' => 'nullable|in:waiting_for_approval,approved,rejected',
+                ]);
+        $validated['ticket_number'] = Ticketing::generateTicketNumber();
         Ticketing::create($validated);
         return redirect()->route('ticketing.index')->with('success', 'Ticketing created');
     }
 
     public function edit(Ticketing $ticketing)
     {
-        
-        return view('ticketing.edit', compact('ticketing, users, departments, categories'));
+        // return view('ticketing.edit', compact('ticketing, users, departments, categories'));
+
+        return view('ticketing.edit', [
+            'item' => $ticketing,
+            'users' => \App\Models\User::all(),
+            'departments' => \App\Models\Department::all(),
+            'categories' => \App\Models\Category::all(),
+        ]);
     }
 
     public function update(Request $request, Ticketing $ticketing)
     {
         $validated = $request->validate([
-            'ticket_number' => 'required|unique:ticketing,ticket_number,' . $ticketing->id,
+        'ticket_number' => 'nullable|unique:ticketings',
             'requested_date' => 'required|date',
             'required_date' => 'required|date',
-            'requester_id' => 'required|exists:users,id',
+            'requested_by' => 'required|exists:users,id', // FIXED
             'department_id' => 'required|exists:departments,id',
-            'request_for_id' => 'required|exists:users,id',
+            'request_for' => 'required|exists:users,id',  // FIXED
             'category_id' => 'required|exists:categories,id',
             'notes' => 'nullable|string',
-            'status' => 'required|in:waiting_for_approval,approved,rejected',
-        ]);
+            'status' => 'nullable|in:waiting_for_approval,approved,rejected',
+                ]);
 
         $ticketing->update($validated);
         return redirect()->route('ticketing.index')->with('success', 'Ticketing updated');
@@ -74,7 +80,7 @@ class TicketingController extends Controller
         $request->validate([
             'status' => 'required|in:approved,rejected',
             'ids' => 'required|array',
-            'ids.*' => 'exists:ticketing,id',
+            'ids.*' => 'exists:ticketings,id',
         ]);
 
         Ticketing::whereIn('id', $request->ids)->update(['status' => $request->status]);
