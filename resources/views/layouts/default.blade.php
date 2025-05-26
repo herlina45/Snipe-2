@@ -251,7 +251,7 @@ dir="{{ Helper::determineLanguageDirection() }}">
                                             <li{!! (Request::is('ticketing/create') ? ' class="active"' : '') !!}>
                                                 <a href="{{ route('ticketing.create') }}" tabindex="-1">
                                                     <i class="fas fa-ticket fa-fw"></i>                                                    
-                                                    {{ trans('general.ticketing') }}
+                                                    {{ trans('Ticketing') }}
                                                 </a>
                                             </li>
                                         @endcan

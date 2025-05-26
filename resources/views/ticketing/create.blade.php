@@ -42,6 +42,15 @@
     'compact' => true, // <== ini kuncinya
 ])
             <div class="form-group">
+                <label for="department_id">Departemen</label>
+                <select name="department_id" class="form-control" required>
+                    <option value="">Select Department</option>
+                    @foreach (\App\Models\Department::all() as $department)
+                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <!-- <div class="form-group">
                 <label for="department_id">Department</label>
                 <select name="department_id" id="department_id" class="form-control" required>
                     <option value="">Select Department</option>
@@ -52,7 +61,7 @@
                         </option>
                     @endforeach
                 </select>
-            </div>
+            </div> -->
 
             <!-- <div class="form-group">
                 <label for="request_for">Request For (Optional)</label>
@@ -86,15 +95,19 @@
             </div>
 
             <div class="form-group">
+                <label for="requested_date">Tanggal Request</label>
+                <input type="date" name="requested_date" class="form-control">
+            </div>
+            <!-- <div class="form-group">
                 <label for="requested_date">Requested Date</label>
                 <input type="date" name="requested_date" id="requested_date" class="form-control"
-                    value="{{ old('requested_date', isset($item->requested_date) ? \Carbon\Carbon::parse($item->requested_date)->format('Y-m-d') : '') }}" required>
-            </div>
+                    value="{{ old('requested_date', isset($item->requested_date) ? \Carbon\Carbon::parse($item->requested_date)->format('d-m-Y') : '') }}" required>
+            </div> -->
 
             <div class="form-group">
                 <label for="required_date">Required Date (Optional)</label>
                 <input type="date" name="required_date" id="required_date" class="form-control"
-                    value="{{ old('required_date', isset($item->required_date) ? \Carbon\Carbon::parse($item->required_date)->format('Y-m-d') : '') }}">
+                    value="{{ old('required_date', isset($item->required_date) ? \Carbon\Carbon::parse($item->required_date)->format('d-m-Y') : '') }}">
             </div>
 
             <div class="form-group">

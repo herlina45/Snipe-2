@@ -27,67 +27,90 @@
 @endif
 
 <div class="row">
-  <!-- panel -->
-  <div class="col-lg-2">
-      <a href="{{ route('hardware.index') }}">
-    <!-- small box -->
-    <div class="dashboard small-box bg-teal">
-      <div class="inner">
-        <h3>{{ number_format(\App\Models\Asset::AssetsForShow()->count()) }}</h3>
-        <p>{{ trans('general.assets') }}</p>
-      </div>
-      <div class="icon" aria-hidden="true">
-          <x-icon type="assets" />
-      </div>
-      @can('index', \App\Models\Asset::class)
-        <a href="{{ route('hardware.index') }}" class="small-box-footer">{{ trans('general.view_all') }}
-            <x-icon type="arrow-circle-right" />
+    <!-- Assets Panel -->
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        <a href="{{ route('hardware.index') }}">
+            <div class="dashboard small-box bg-teal">
+                <div class="inner">
+                    <h3>{{ number_format(\App\Models\Asset::AssetsForShow()->count()) }}</h3>
+                    <p>{{ trans('general.assets') }}</p>
+                </div>
+                <div class="icon" aria-hidden="true">
+                    <x-icon type="assets" />
+                </div>
+                @can('index', \App\Models\Asset::class)
+                    <a href="{{ route('hardware.index') }}" class="small-box-footer">
+                        {{ trans('general.view_all') }}
+                        <x-icon type="arrow-circle-right" />
+                    </a>
+                @endcan
+            </div>
         </a>
-      @endcan
-    </div>
-      </a>
-  </div>
-
-  <div class="col-lg-2">
-     <a href="{{ route('licenses.index') }}">
-    <div class="dashboard small-box bg-maroon">
-      <div class="inner">
-        <h3>{{ number_format($counts['license']) }}</h3>
-        <p>{{ trans('general.licenses') }}</p>
-      </div>
-      <div class="icon" aria-hidden="true">
-          <x-icon type="licenses" />
-      </div>
-        @can('view', \App\Models\License::class)
-          <a href="{{ route('licenses.index') }}" class="small-box-footer">{{ trans('general.view_all') }}
-              <x-icon type="arrow-circle-right" />
-          </a>
-        @endcan
-    </div>
-     </a>
-  </div>
-
-   <div class="col-lg-2">
-    <a href="{{ route('users.index') }}">
-   <!-- small box -->
-   <div class="dashboard small-box bg-light-blue">
-     <div class="inner">
-       <h3>{{ number_format($counts['user']) }}</h3>
-       <p>{{ trans('general.people') }}</p>
-     </div>
-     <div class="icon" aria-hidden="true">
-         <x-icon type="users" />
-     </div>
-       @can('view', \App\Models\License::class)
-         <a href="{{ route('users.index') }}" class="small-box-footer">{{ trans('general.view_all') }}
-             <x-icon type="arrow-circle-right" />
-         </a>
-       @endcan
-   </div>
-    </a>
     </div>
 
+    <!-- Licenses Panel -->
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        <a href="{{ route('licenses.index') }}">
+            <div class="dashboard small-box bg-maroon">
+                <div class="inner">
+                    <h3>{{ number_format($counts['license']) }}</h3>
+                    <p>{{ trans('general.licenses') }}</p>
+                </div>
+                <div class="icon" aria-hidden="true">
+                    <x-icon type="licenses" />
+                </div>
+                @can('view', \App\Models\License::class)
+                    <a href="{{ route('licenses.index') }}" class="small-box-footer">
+                        {{ trans('general.view_all') }}
+                        <x-icon type="arrow-circle-right" />
+                    </a>
+                @endcan
+            </div>
+        </a>
+    </div>
 
+    <!-- People Panel -->
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        <a href="{{ route('users.index') }}">
+            <div class="dashboard small-box bg-light-blue">
+                <div class="inner">
+                    <h3>{{ number_format($counts['user']) }}</h3>
+                    <p>{{ trans('general.people') }}</p>
+                </div>
+                <div class="icon" aria-hidden="true">
+                    <x-icon type="users" />
+                </div>
+                @can('view', \App\Models\User::class)
+                    <a href="{{ route('users.index') }}" class="small-box-footer">
+                        {{ trans('general.view_all') }}
+                        <x-icon type="arrow-circle-right" />
+                    </a>
+                @endcan
+            </div>
+        </a>
+    </div>
+
+    <!-- Ticketing Panel -->
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        <a href="{{ route('ticketing.index') }}">
+            <div class="dashboard small-box bg-purple">
+                <div class="inner">
+                    <h3>{{ number_format($counts['ticketing']) }}</h3>
+                    <p>{{ trans('Ticketing') }}</p>
+                </div>
+                <div class="icon" aria-hidden="true">
+                                                    <i class="fas fa-ticket fa-fw"></i>                                                    
+                </div>
+                @can('view', \App\Models\Ticketing::class)
+                    <a href="{{ route('ticketing.index') }}" class="small-box-footer">
+                        {{ trans('general.view_all') }}
+                        <x-icon type="arrow-circle-right" />
+                    </a>
+                @endcan
+            </div>
+        </a>
+    </div>
+</div>
   <!-- <div class="col-lg-2 col-xs-6">
       <a href="{{ route('accessories.index') }}">
     <div class="dashboard small-box bg-orange">
@@ -145,8 +168,8 @@
  </div> -->
 
 
-</div>
-</div>
+
+<!-- </div> -->
 
 @if ($counts['grand_total'] == 0)
 

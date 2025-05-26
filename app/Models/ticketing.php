@@ -22,10 +22,41 @@ class Ticketing extends Model
         'status',
     ];
 
-    public static function generateTicketNumber()
-{
-    return 'TN-' . str_pad(self::max('id') + 1, 5, '0', STR_PAD_LEFT);
-}
+    // public static function generateTicketNumber()
+    // {
+    //     return 'TN-' . str_pad(self::max('id') + 1, 5, '0', STR_PAD_LEFT);
+    // }
+
+    public static function generateTicketNumber($departmentId, $requestDate = null)
+    {
+        // Fetch the department code (assuming Department model has a 'code' or 'name' field)
+        $department = Department::findOrFail($departmentId);
+        $deptCode = strtoupper(substr($department->code ?? $department->name, 0, 2)); // Use first 2 letters, e.g., 'IT'
+
+        // Use provided request date or current date
+        $date = $requestDate ? \Carbon\Carbon::parse($requestDate) : now();
+        $monthYear = $date->format('my'); // e.g., '0525' for May 2025
+
+        // Cari atau bikin counter
+        $counter = TicketCounter::firstOrCreate(
+            [
+                'department_id' => $departmentId,
+                'department_code' => $deptCode,
+                'month_year' => $monthYear,
+            ],
+            ['counter' => 0]
+        );
+
+        // Increment counter
+        $counter->increment('counter');
+        $counter->refresh(); // Ambil data terbaru dari DB
+
+        // Format the running number with 3 digits
+        $runningNumber = str_pad($counter->counter, 3, '0', STR_PAD_LEFT);
+
+        // Return the formatted ticket number
+        return "TN{$deptCode}-{$runningNumber}-{$monthYear}";
+    }
 
     // Relasi ke User (requested_by)
     public function requester()

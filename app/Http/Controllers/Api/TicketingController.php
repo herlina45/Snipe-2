@@ -15,6 +15,7 @@ class TicketingController extends Controller
             ->when($request->department_id, fn($query) => $query->where('department_id', $request->department_id));
 
         $ticketing = $query->paginate(50);
+        
 
         return response()->json([
             'total' => $ticketing->total(),

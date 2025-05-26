@@ -69,36 +69,36 @@
 
 
             <table
-  data-toggle="table"
-  data-url="{{ route('api.ticketing.index', [
-      'status' => e(Request::get('status')),
-      'department_id' => e(Request::get('department_id'))
-  ]) }}"
-  data-search="true"
-  data-pagination="true"
-  data-side-pagination="server"
-  data-show-refresh="true"
-  data-show-columns="true"
-  data-toolbar="#ticketingBulkEditToolbar"
-  class="table table-striped snipe-table"
-  id="ticketingListingTable">
+      data-toggle="table"
+      data-url="{{ route('api.ticketing.index', [
+          'status' => e(Request::get('status')),
+          'department_id' => e(Request::get('department_id'))
+      ]) }}"
+      data-search="true"
+      data-pagination="true"
+      data-side-pagination="server"
+      data-show-refresh="true"
+      data-show-columns="true"
+      data-toolbar="#ticketingBulkEditToolbar"
+      class="table table-striped snipe-table"
+      id="ticketingListingTable">
 
-  <thead>
-    <tr>
-      <th data-field="ticket_number" data-sortable="true">Ticket Number</th>
-      <th data-field="requested_date" data-sortable="true">Requested Date</th>
-      <th data-field="required_date" data-sortable="true">Required Date</th>
-      <th data-field="requester" data-sortable="true">Requested By</th>
-      <th data-field="request_for" data-sortable="true">Request For</th>
-      <th data-field="department" data-sortable="true">Department</th>
-      <th data-field="category" data-sortable="true">Category</th>
-      <th data-field="status" data-sortable="true">Status</th>
-      <th data-field="notes">Notes</th>
-      <th data-field="actions" data-formatter="actionFormatter" data-align="center">Actions</th>
+      <thead>
+        <tr>
+          <th data-field="ticket_number" data-sortable="true">Ticket Number</th>
+          <th data-field="requested_date" data-sortable="true">Requested Date</th>
+          <th data-field="required_date" data-sortable="true">Required Date</th>
+          <th data-field="requester" data-sortable="true">Requested By</th>
+          <th data-field="request_for" data-sortable="true">Request For</th>
+          <th data-field="department" data-sortable="true">Department</th>
+          <th data-field="category" data-sortable="true">Category</th>
+          <th data-field="status" data-sortable="true">Status</th>
+          <th data-field="notes">Notes</th>
+          <th data-field="actions" data-formatter="actionFormatter" data-align="center">Actions</th>
 
-    </tr>
-  </thead>
-</table>
+        </tr>
+      </thead>
+    </table>
 
           </div>
         </div>
@@ -112,7 +112,7 @@
 @section('moar_scripts')
   @include('partials.bootstrap-table')
 
-    <script>
+  <script>
     function actionFormatter(value, row, index) {
       return `
         <a href="/ticketing/${row.id}/edit" class="btn btn-sm btn-warning">Edit</a>
@@ -124,5 +124,4 @@
       `;
     }
   </script>
-
 @stop

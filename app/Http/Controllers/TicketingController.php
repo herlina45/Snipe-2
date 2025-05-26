@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ticketing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TicketingController extends Controller
 {
@@ -22,21 +23,57 @@ class TicketingController extends Controller
     }
     public function store(Request $request)
     {
-        $validated = $request->validate([
-        'ticket_number' => 'nullable|unique:ticketings',
-            'requested_date' => 'required|date',
-            'required_date' => 'required|date',
-            'requested_by' => 'required|exists:users,id', // FIXED
+        $request->validate([
             'department_id' => 'required|exists:departments,id',
-            'request_for' => 'nullable|exists:users,id',  // FIXED
+            'requested_date' => 'nullable|date',
             'category_id' => 'required|exists:categories,id',
+            'requested_by' => 'required|exists:users,id',
+            'request_for' => 'nullable|exists:users,id',
+            'required_date' => 'nullable|date',
             'notes' => 'nullable|string',
-            'status' => 'nullable|in:waiting_for_approval,approved,rejected',
-                ]);
-        $validated['ticket_number'] = Ticketing::generateTicketNumber();
-        Ticketing::create($validated);
-        return redirect()->route('ticketing.index')->with('success', 'Ticketing created');
+            'status' => 'nullable|string',
+        ]);
+
+        $ticket = DB::transaction(function () use ($request) {
+            $ticket = new Ticketing();
+            $ticket->department_id = $request->input('department_id');
+            $ticket->ticket_number = Ticketing::generateTicketNumber(
+                $request->input('department_id'),
+                $request->input('requested_date')
+            );
+            $ticket->requested_date = $request->input('requested_date') ?? now();
+            $ticket->required_date = $request->input('required_date');
+            $ticket->requested_by = $request->input('requested_by');
+            $ticket->request_for = $request->input('request_for');
+            $ticket->category_id = $request->input('category_id');
+            $ticket->status = $request->input('status', 'Waiting for approval');
+            $ticket->notes = $request->input('notes');
+            $ticket->save();
+
+            return $ticket;
+        });
+
+        return redirect()->route('ticketing.index')->with('success', 'Tiket berhasil dibuat.');
     }
+
+        // $validated = $request->validate([
+        // 'ticket_number' => 'nullable|unique:ticketings',
+        //     'requested_date' => 'required|date',
+        //     'required_date' => 'required|date',
+        //     'requested_by' => 'required|exists:users,id', // FIXED
+        //     'department_id' => 'required|exists:departments,id',
+        //     'request_for' => 'nullable|exists:users,id',  // FIXED
+        //     'category_id' => 'required|exists:categories,id',
+        //     'notes' => 'nullable|string',
+        //     'status' => 'nullable|in:waiting_for_approval,approved,rejected',
+        //         ]);
+        // $departmentId = $validated['department_id'];
+        // $requestDate = $validated['requested_date'] ?? null;
+        // $validated['ticket_number'] = Ticketing::generateTicketNumber($departmentId, $requestDate);
+        // Ticketing::create($validated);
+        // return redirect()->route('ticketing.index')->with('success', 'Ticketing created');
+    
+    
 
     public function edit(Ticketing $ticketing)
     {
