@@ -94,21 +94,18 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="requested_date">Tanggal Request</label>
-                <input type="date" name="requested_date" class="form-control">
-            </div>
-            <!-- <div class="form-group">
-                <label for="requested_date">Requested Date</label>
-                <input type="date" name="requested_date" id="requested_date" class="form-control"
-                    value="{{ old('requested_date', isset($item->requested_date) ? \Carbon\Carbon::parse($item->requested_date)->format('d-m-Y') : '') }}" required>
-            </div> -->
-
-            <div class="form-group">
-                <label for="required_date">Required Date (Optional)</label>
-                <input type="date" name="required_date" id="required_date" class="form-control"
-                    value="{{ old('required_date', isset($item->required_date) ? \Carbon\Carbon::parse($item->required_date)->format('d-m-Y') : '') }}">
-            </div>
+@include ('partials.forms.edit.datepicker', [
+    'translated_name' => 'Tanggal Pengajuan',
+    'fieldname' => 'requested_date',
+    'required' => 'true',
+    'value' => old('requested_date', isset($item->requested_date) ? \Carbon\Carbon::parse($item->requested_date)->format('Y-m-d') : '')
+])
+    @include ('partials.forms.edit.datepicker', [
+        'translated_name' => 'Tanggal Dibutuhkan (Opsional)',
+        'fieldname' => 'required_date',
+        'required' => 'false',
+        'value' => old('required_date', isset($item->required_date) ? \Carbon\Carbon::parse($item->required_date)->format('Y-m-d') : '')
+    ])
 
             <div class="form-group">
                 <label for="notes">Notes (Optional)</label>
@@ -144,4 +141,17 @@
             <a href="{{ route('ticketing.index') }}" class="btn btn-secondary">Back to ticket list</a>
         </form>
 
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         @endsection
+
+        @section('moar_scripts')
+    <script nonce="{{ csrf_token() }}">
+        $(document).ready(function() {
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true
+            });
+        });
+    </script>
+@endsection

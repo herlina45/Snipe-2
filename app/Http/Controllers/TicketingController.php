@@ -124,6 +124,32 @@ class TicketingController extends Controller
         return redirect()->route('ticketing.index')->with('success', 'Ticketing updated');
     }
 
+public function destroy(Ticketing $ticketing)
+    {
+        DB::transaction(function () use ($ticketing) {
+            // Ambil department_id dan month_year dari tiket
+            $departmentId = $ticketing->department_id;
+            $monthYear = $ticketing->created_at ? $ticketing->created_at->format('my') : now()->format('my');
+
+            // Hapus tiket
+            $ticketing->delete();
+
+            // Cek apakah masih ada tiket lain untuk department_id dan month_year ini
+            $ticketCount = Ticketing::where('department_id', $departmentId)
+                ->whereYear('created_at', $ticketing->created_at->year)
+                ->whereMonth('created_at', $ticketing->created_at->month)
+                ->count();
+
+            // Kalo ga ada tiket lagi, reset counter
+            if ($ticketCount === 0) {
+                TicketCounter::where('department_id', $departmentId)
+                    ->where('month_year', $monthYear)
+                    ->delete();
+            }
+        });
+        return redirect()->route('ticketing.index')->with('success', 'Ticketing deleted');
+    }
+
     public function customReport()
     {
         return response()->json(['message' => 'Custom report not implemented']);
