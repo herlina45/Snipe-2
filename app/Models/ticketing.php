@@ -22,6 +22,18 @@ class Ticketing extends Model
         'status',
     ];
 
+    public function getFormattedStatusAttribute()
+    {
+        $statuses = [
+            'waiting_for_approval' => 'Waiting for Approval',
+            'approved' => 'Approved',
+            'rejected' => 'Rejected',
+        ];
+
+        return $statuses[$this->status] ?? $this->status;
+    }
+
+
     // public static function generateTicketNumber()
     // {
     //     return 'TN-' . str_pad(self::max('id') + 1, 5, '0', STR_PAD_LEFT);

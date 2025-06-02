@@ -7,13 +7,13 @@
   @else
     {{ trans('general.all') }}
   @endif
-  {{ trans('general.ticketing') }}
+  {{ trans('Ticketing') }}
 @stop
 
 {{-- Header actions --}}
 @section('header_right')
-  <a href="{{ route('ticketing.custom_report') }}" style="margin-right: 5px;" class="btn btn-default">
-    {{ trans('general.custom_export') }}
+  <a href="{{ route('ticketing.export') }}" style="margin-right: 5px;" class="btn btn-default">
+    {{ trans('Custom Export') }}
   </a>
   @can('create', \App\Models\Ticketing::class)
     <a href="{{ route('ticketing.create') }}" class="btn btn-primary pull-right">
@@ -21,8 +21,7 @@
     </a>
   @endcan
 @stop
-
-{{-- Page content --}}
+{{-- Page content Ticketing--}}
 @section('content')
 
 <div class="row">
@@ -34,71 +33,26 @@
             {{-- Bulk Actions Toolbar --}}
             @include('partials.ticketing-bulk-actions', ['status' => Request::get('status')])
 
-            {{-- Dynamic Table --}}
-            <!-- <table
-              data-advanced-search="true"
-              data-click-to-select="true"
-              data-columns="{{ \App\Presenters\TicketingPresenter::dataTableLayout() }}"
-              
-              data-cookie-id-table="ticketingListingTable"
-              data-pagination="true"
-              data-id-table="ticketingListingTable"
-              data-search="true"
-              data-side-pagination="server"
-              data-show-columns="true"
-              data-show-export="true"
-              data-show-footer="true"
-              data-show-refresh="true"
-              data-sort-order="asc"
-              data-sort-name="ticket_number"
-              data-show-fullscreen="true"
-              data-toolbar="#ticketingBulkEditToolbar"
-              data-bulk-button-id="#bulkTicketingEditButton"
-              data-bulk-form-id="#ticketingBulkForm"
-              id="ticketingListingTable"
-              class="table table-striped snipe-table"
+            <table
+              data-toggle="table"
               data-url="{{ route('api.ticketing.index', [
                   'status' => e(Request::get('status')),
                   'department_id' => e(Request::get('department_id'))
               ]) }}"
-              data-export-options='{
-                "fileName": "export{{ (Request::has('status')) ? '-'.str_slug(Request::get('status')) : '' }}-ticketing-{{ date('Y-m-d') }}",
-                "ignoreColumn": ["actions","checkbox"]
-              }'>
-            </table> -->
+              data-click-to-select="true"
+              data-columns="{{ \App\Presenters\TicketingPresenter::dataTableLayout() }}"
+              data-show-export="true"
+              data-show-fullscreen="true"
+              data-search="true"
+              data-pagination="true"
+              data-side-pagination="server"
+              data-show-refresh="true"
+              data-show-columns="true"
+              data-toolbar="#ticketingBulkEditToolbar"
+              class="table table-striped snipe-table"
+              id="ticketingListingTable">
 
-
-            <table
-      data-toggle="table"
-      data-url="{{ route('api.ticketing.index', [
-          'status' => e(Request::get('status')),
-          'department_id' => e(Request::get('department_id'))
-      ]) }}"
-      data-search="true"
-      data-pagination="true"
-      data-side-pagination="server"
-      data-show-refresh="true"
-      data-show-columns="true"
-      data-toolbar="#ticketingBulkEditToolbar"
-      class="table table-striped snipe-table"
-      id="ticketingListingTable">
-
-      <thead>
-        <tr>
-          <th data-field="ticket_number" data-sortable="true">Ticket Number</th>
-          <th data-field="requested_date" data-sortable="true">Requested Date</th>
-          <th data-field="required_date" data-sortable="true">Required Date</th>
-          <th data-field="requester" data-sortable="true">Requested By</th>
-          <th data-field="request_for" data-sortable="true">Request For</th>
-          <th data-field="department" data-sortable="true">Department</th>
-          <th data-field="category" data-sortable="true">Category</th>
-          <th data-field="status" data-sortable="true">Status</th>
-          <th data-field="notes">Notes</th>
-          <th data-field="actions" data-formatter="actionFormatter" data-align="center">Actions</th>
-
-        </tr>
-      </thead>
-    </table>
+            </table>
 
           </div>
         </div>

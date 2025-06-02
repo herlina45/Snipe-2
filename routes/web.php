@@ -551,6 +551,10 @@ Route::group(['prefix' => 'reports', 'middleware' => ['auth']], function () {
         ->name('reports.post-custom');
 
 
+        // di routes/web.php
+Route::get('reports/ticketing', [TicketingController::class, 'export'])->name('ticketing.export');
+Route::post('reports/ticketing', [TicketingController::class, 'postExport'])->name('ticketing.export');
+
     Route::prefix('templates')
         ->group(function () {
 

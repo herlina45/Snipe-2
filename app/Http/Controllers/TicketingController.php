@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Ticketing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\TicketCounter;
 
 class TicketingController extends Controller
 {
@@ -90,7 +91,7 @@ class TicketingController extends Controller
     public function update(Request $request, Ticketing $ticketing)
     {
         $validated = $request->validate([
-        'ticket_number' => 'nullable|unique:ticketings',
+        'ticket_number' => 'nullable',
             'requested_date' => 'required|date',
             'required_date' => 'required|date',
             'requested_by' => 'required|exists:users,id', // FIXED
@@ -98,11 +99,10 @@ class TicketingController extends Controller
             'request_for' => 'required|exists:users,id',  // FIXED
             'category_id' => 'required|exists:categories,id',
             'notes' => 'nullable|string',
-            'status' => 'nullable|in:waiting_for_approval,approved,rejected',
+            'status' => 'nullable|in:Waiting for approval,Approved,Rejected',
                 ]);
 
-        $ticketing->update($validated);
-        return redirect()->route('ticketing.index')->with('success', 'Ticketing updated');
+$ticketing->update($request->except('ticket_number'));        return redirect()->route('ticketing.index')->with('success', 'Ticketing updated');
     }
 
     public function updateStatus(Request $request, Ticketing $ticketing)
@@ -150,8 +150,105 @@ public function destroy(Ticketing $ticketing)
         return redirect()->route('ticketing.index')->with('success', 'Ticketing deleted');
     }
 
-    public function customReport()
+    // public function customReport()
+    // {
+    //     return response()->json(['message' => 'Custom report not implemented']);
+    // }
+
+    public function export()
     {
-        return response()->json(['message' => 'Custom report not implemented']);
+        return view('reports.ticketing', [
+            'users' => \App\Models\User::all(), // Tambahkan ini
+            'departments' => \App\Models\Department::all(),
+            'categories' => \App\Models\Category::all()
+        ]);
+    }
+
+    public function postExport(Request $request)
+    {
+        // Validasi input dari form
+        $request->validate([
+            'ticket_number' => 'nullable|boolean',
+            'requested_date' => 'nullable|boolean',
+            'required_date' => 'nullable|boolean',
+            'requested_by' => 'nullable|boolean',
+            'request_for' => 'nullable|boolean',
+            'department' => 'nullable|boolean',
+            'category' => 'nullable|boolean',
+            'status' => 'nullable|boolean',
+            'notes' => 'nullable|boolean',
+            'requested_start' => 'nullable|date',
+            'requested_end' => 'nullable|date',
+            'required_start' => 'nullable|date',
+            'required_end' => 'nullable|date',
+            'by_dept_id' => 'nullable|array',
+            'by_status_id' => 'nullable|array',
+            'by_category_id' => 'nullable|array',
+            'by_requested_by_id' => 'nullable|array',
+            'by_request_for_id' => 'nullable|array',
+        ]);
+
+        // Query ticketing dengan relasi
+        $query = Ticketing::with(['requester', 'requestFor', 'department', 'category', 'status']);
+
+        // Filter
+        if ($request->filled('by_dept_id')) {
+            $query->whereIn('department_id', $request->by_dept_id);
+        }
+        if ($request->filled('by_status_id')) {
+            $query->whereIn('status', $request->by_status_id); // Sesuaikan dengan kolom status
+        }
+        if ($request->filled('by_category_id')) {
+            $query->whereIn('category_id', $request->by_category_id);
+        }
+        if ($request->filled('by_requester_id')) {
+            $query->whereIn('requested_by', $request->by_requester_id); // Perbaiki dari 'requested_by_id'
+        }
+        if ($request->filled('by_request_for_id')) {
+            $query->whereIn('request_for', $request->by_request_for_id); // Perbaiki dari 'request_for_id'
+        }
+        if ($request->filled('requested_start') && $request->filled('requested_end')) {
+            $query->whereBetween('requested_date', [$request->requested_start, $request->requested_end]);
+        }
+        if ($request->filled('required_start') && $request->filled('required_end')) {
+            $query->whereBetween('required_date', [$request->required_start, $request->required_end]);
+        }
+
+        // Ambil data
+        $tickets = $query->get();
+
+        // Buat CSV
+        $csv = \League\Csv\Writer::createFromString();
+        $headers = [];
+        if ($request->ticket_number) $headers[] = 'Ticket Number';
+        if ($request->requested_date) $headers[] = 'Requested Date';
+        if ($request->required_date) $headers[] = 'Required Date';
+        if ($request->requested_by) $headers[] = 'Requested By';
+        if ($request->request_for) $headers[] = 'Request For';
+        if ($request->department) $headers[] = 'Department';
+        if ($request->category) $headers[] = 'Category';
+        if ($request->status) $headers[] = 'Status';
+        if ($request->notes) $headers[] = 'Notes';
+
+        $csv->insertOne($headers);
+
+        foreach ($tickets as $ticket) {
+            $row = [];
+            if ($request->ticket_number) $row[] = $ticket->ticket_number;
+            if ($request->requested_date) $row[] = $ticket->requested_date;
+            if ($request->required_date) $row[] = $ticket->required_date;
+            if ($request->requested_by) $row[] = $ticket->requester ? ($ticket->requester->first_name . ' ' . $ticket->requester->last_name) : 'N/A';
+            if ($request->request_for) $row[] = $ticket->requestFor ? ($ticket->requestFor->first_name . ' ' . $ticket->requestFor->last_name) : 'N/A';
+            if ($request->department) $row[] = $ticket->department?->name ?? 'N/A';
+            if ($request->category) $row[] = $ticket->category?->name ?? 'N/A';
+            if ($request->status) $row[] = $ticket->status ?? 'N/A'; // Status di sini string, bukan relasi
+            if ($request->notes) $row[] = $ticket->notes;
+            $csv->insertOne($row);
+        }
+
+        return response($csv->getContent(), 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="ticketing_export.csv"',
+        ]);
     }
 }

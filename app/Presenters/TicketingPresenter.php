@@ -11,6 +11,8 @@ class TicketingPresenter
      */
     public static function dataTableLayout()
     {
+
+        
         return json_encode([
             [
                 'field' => 'checkbox',
@@ -19,62 +21,76 @@ class TicketingPresenter
             ],
             [
                 'field' => 'ticket_number',
-                'title' => trans('general.ticket_number'),
-                'sortable' => true
+                'title' => trans('Ticket Number'),
+                'sortable' => true,
+                'visible' => true,
+                'searchable' => true,
             ],
             [
                 'field' => 'requested_date',
-                'title' => trans('general.requested_date'),
+                'title' => trans('Requested Date'),
                 'sortable' => true,
-                'formatter' => 'dateFormatter'
+                'visible' => true,
+                'searchable' => true,
             ],
             [
                 'field' => 'required_date',
-                'title' => trans('general.required_date'),
+                'title' => trans('Required Date'),
                 'sortable' => true,
-                'formatter' => 'dateFormatter'
+                'visible' => true,
+                'searchable' => true,
             ],
             [
-                'field' => 'requester',
-                'title' => trans('general.requested_by'),
+                'field' => 'requested_by',
+                'title' => trans('Requested By'),
                 'sortable' => true,
-                'formatter' => 'nameFormatter'
-            ],
-            [
-                'field' => 'department',
-                'title' => trans('general.department'),
-                'sortable' => true,
-                'formatter' => 'nameFormatter'
+                'visible' => true,
+                'searchable' => true,
             ],
             [
                 'field' => 'request_for',
-                'title' => trans('general.request_for'),
+                'title' => trans('Request For'),
                 'sortable' => true,
-                'formatter' => 'nameFormatter'
+                'visible' => true,
+                'searchable' => true,
+            ],
+            [
+                'field' => 'department',
+                'title' => trans('Department'),
+                'sortable' => true,
+                'visible' => true,
+                'searchable' => true,
             ],
             [
                 'field' => 'category',
-                'title' => trans('general.category'),
+                'title' => trans('Category'),
                 'sortable' => true,
-                'formatter' => 'nameFormatter'
+                'visible' => true,
+                'searchable' => true,
             ],
             [
                 'field' => 'notes',
-                'title' => trans('general.notes'),
-                'sortable' => false
+                'title' => trans('Notes'),
+                'sortable' => false,
+                'visible' => true,
+                'searchable' => true,
             ],
             [
                 'field' => 'status',
-                'title' => trans('general.status'),
+                'title' => trans('Status'),
                 'sortable' => true,
-                'formatter' => 'statusFormatter'
+                'visible' => true,
+                'searchable' => true,
             ],
             [
                 'field' => 'actions',
-                'title' => trans('general.actions'),
+                'title' => trans('Actions'),
                 'sortable' => false,
-                'formatter' => 'actionsFormatter'
+                'visible' => true,
+                'searchable' => true,
+                'formatter' => 'actionFormatter',
             ]
         ]);
     }
+
 }

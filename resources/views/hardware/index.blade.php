@@ -52,7 +52,7 @@
 
 @stop
 
-{{-- Page content --}}
+{{-- Page content Hardware--}}
 @section('content')
 
 <div class="row">
